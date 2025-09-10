@@ -10,6 +10,8 @@ import SwiftUI
 struct SheetChangeBackground: View {
     @State private var isEditHome : Bool = false
     @Binding var backgroundImageName: String
+    @Binding var abaTheme: ABATheme
+    
     
     var body: some View {
         VStack{
@@ -19,48 +21,52 @@ struct SheetChangeBackground: View {
                 Image(systemName: "highlighter")
                 Text("Edit Home")
             })
-            .foregroundColor(.black)
+            .foregroundColor(abaTheme == .dark ? .white : .black)
             .padding(.vertical, 8)
             .padding(.horizontal, 15)
-            .background(.white)
+            .background(abaTheme == .dark ? .black.opacity(0.5) : .white)
             .cornerRadius(40)
             .sheet(isPresented: $isEditHome, content: {
-                ShowSheetLongPress(selectedImage: $backgroundImageName)
+                ShowSheetLongPress(selectedImage: $backgroundImageName, abaTheme: $abaTheme)
+                    .presentationBackground(
+                        abaTheme == .dark ? Color.black : Color.white
+                    )
             })
         }
     }
 }
 
 struct ShowSheetLongPress: View {
-    @State private var isSelectAppearance : String = "Themes"
     @Environment(\.colorScheme) var colorScheme
-    let appearances : [String] = ["Themes", "Dark Mode", "Homescreen", "System", "Accessibility"]
-    let appearanceImages : [[String]] = [["Bayon", "Bayon"], ["BonTeaySrey", "BonTeaySrey"], ["Cute Pets", "Cute Pets"], ["Khmer Heritage", "Khmer Heritage"], ["Moon Night", "Moon Night"], ["Sunset", "Moon Night"], ["Train", "Train"]]
     @Binding var selectedImage: String
-    
-    @State var selectedAppearanceImage: String? = nil
-    
+    @Binding var abaTheme: ABATheme
+
+    let appearanceImages : [[String]] = [["Bayon", "Bayon"], ["BonTeaySrey", "BonTeaySrey"], ["Cute Pets", "Cute Pets"], ["Khmer Heritage", "Khmer Heritage"], ["Moon Night", "Moon Night"], ["Sunset", "Moon Night"], ["Train", "Train"]]
+    let appearances: [ABATheme] = [.themes, .system, .dark, .homescreen, .accessibility]
+
+        
     var body: some View{
         VStack(alignment: .leading){
             Text("Appearance")
                 .font(.title)
                 .fontWeight(.bold)
+                .foregroundColor(abaTheme == .dark ? Color.white : Color.black)
             
             ScrollView(.horizontal){
                 LazyHStack{
                     ForEach(appearances, id: \.self){appearance in
                         Button(action: {
-                            isSelectAppearance = appearance
-                        }) {
-                            Text(appearance)
+                            abaTheme = appearance
+                        }){
+                            Text(appearance.rawValue.capitalized)
                                 .padding(.vertical, 10)
                                 .padding(.horizontal, 20)
                                 .frame(maxWidth: 150)
                                 .foregroundColor(
-                                    isSelectAppearance == appearance ? Color.white : Color.black.opacity(0.7)
+                                    abaTheme == appearance ? Color.white : Color.black.opacity(0.7)
                                 )
                                 .background(
-                                    isSelectAppearance == appearance ? Color.gray.opacity(0.2) : Color.white
+                                    abaTheme == appearance ? Color.black.opacity(0.7) : Color.white
                                 )
                                 .cornerRadius(50)
                         }
@@ -76,6 +82,7 @@ struct ShowSheetLongPress: View {
                         HStack(spacing: 20){
                             CardAppearanceImage(appearanceImage: appearanceImage[0], appearanceTitle: appearanceImage[1], selectedImage : $selectedImage)
                         }
+                        .foregroundColor(abaTheme == .dark ? .white : .black)
                     }
                 }
             }.scrollIndicators(.hidden)
@@ -83,6 +90,7 @@ struct ShowSheetLongPress: View {
         }.presentationDetents([.medium])
             .padding(.horizontal, 20)
             .padding(.vertical, 30)
+            .background(abaTheme == .dark ? Color.gray : Color.whiteSmoke)
     }
 }
 
@@ -116,4 +124,8 @@ struct CardAppearanceImage: View {
                 .padding(.vertical, 10)
         }
     }
+}
+
+#Preview {
+    ABA()
 }

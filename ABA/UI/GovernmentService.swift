@@ -62,10 +62,7 @@ struct CardGovernmentService : View{
                 .foregroundColor(.white)
             
         }
-//        .padding()
         .frame(width: 70, height: 110)
-//        .background(.white)
-//        .cornerRadius(15)
     }
 }
 

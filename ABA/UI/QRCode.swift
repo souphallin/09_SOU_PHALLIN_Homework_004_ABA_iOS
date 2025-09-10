@@ -5,65 +5,6 @@
 //  Created by Mac on 9/9/25.
 //
 
-
-
-//// DataScannerRepresentable.swift
-//import SwiftUI
-//import VisionKit
-//
-//struct DataScannerRepresentable: UIViewControllerRepresentable {
-//    @Binding var shouldStartScanning: Bool
-//    @Binding var scannedText: String
-//    var dataToScanFor: Set<DataScannerViewController.RecognizedDataType>
-//    
-//    class Coordinator: NSObject, DataScannerViewControllerDelegate {
-//       var parent: DataScannerRepresentable
-//       
-//       init(_ parent: DataScannerRepresentable) {
-//           self.parent = parent
-//       }
-//               
-//        func dataScanner(_ dataScanner: DataScannerViewController, didTapOn item: RecognizedItem) {
-//            switch item {
-//            case .text(let text):
-//                parent.scannedText = text.transcript
-//            case .barcode(let barcode):
-//                parent.scannedText = barcode.payloadStringValue ?? "Unable to decode the scanned code"
-//            default:
-//                print("unexpected item")
-//            }
-//        }
-//    }
-//    
-//    func makeUIViewController(context: Context) -> DataScannerViewController {
-//        let dataScannerVC = DataScannerViewController(
-//            recognizedDataTypes: dataToScanFor,
-//            qualityLevel: .accurate,
-//            recognizesMultipleItems: true,
-//            isHighFrameRateTrackingEnabled: true,
-//            isPinchToZoomEnabled: true,
-//            isGuidanceEnabled: true,
-//            isHighlightingEnabled: true
-//        )
-//        
-//        dataScannerVC.delegate = context.coordinator
-//       
-//       return dataScannerVC
-//    }
-//
-//    func updateUIViewController(_ uiViewController: DataScannerViewController, context: Context) {
-//       if shouldStartScanning {
-//           try? uiViewController.startScanning()
-//       } else {
-//           uiViewController.stopScanning()
-//       }
-//    }
-//
-//    func makeCoordinator() -> Coordinator {
-//       Coordinator(self)
-//    }
-//}
-
 import CoreImage
 import CoreImage.CIFilterBuiltins
 import SwiftUI
@@ -115,7 +56,9 @@ struct QRGenerator: View {
                     ZStack{
                         Image("KHQR")
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
+                            .scaledToFill()
+//                            .aspectRatio(contentMode: .fill)
+//                            .clipShape(RoundedRectangle(cornerRadius: 10))
                             .cornerRadius(10)
                                                 
                         QRCode()
@@ -126,7 +69,6 @@ struct QRGenerator: View {
                             Text("$0.00")
                         }
                         .font(.system(size: 20, weight: .bold))
-//                        .frame(alignment: .leading)
                         .foregroundColor(.black)
                         .padding(.bottom, 210)
                         .padding(.trailing, 80)
@@ -176,10 +118,12 @@ struct ButtonInQRView: View {
         VStack{
             Image(systemName: image)
                 .font(.system(size: 30))
-                .frame(width: 60, height: 60)
-                .background(.white.opacity(0.15))
+                .frame(width: 35, height: 35)
+                .padding(10)
+                .background(.white.opacity(0.2))
                 .cornerRadius(100)
             Text(text)
+                .font(.system(size: 15))
         }
     }
 }
@@ -207,5 +151,6 @@ struct QRCode: View {
 }
 
 #Preview{
-    ProfileInfo()
+//    ProfileInfo()
+    QRGenerator()
 }

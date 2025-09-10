@@ -7,9 +7,17 @@
 
 import SwiftUI
 
+enum ABATheme: String {
+    case themes = "Themes"
+    case system = "System"
+    case dark = "Dark Mode"
+    case homescreen = "Homescreen"
+    case accessibility = "Accessibility"
+}
 struct ABA: View {
     @State private var showChangeBackgroundSheet = false
     @State private var backgroundImageName: String = "Bayon"
+    @State private var abaTheme: ABATheme = .themes
 
     var body: some View {
         ZStack{
@@ -22,7 +30,7 @@ struct ABA: View {
                     showChangeBackgroundSheet.toggle()
                 })
                 .sheet(isPresented: $showChangeBackgroundSheet, content: {
-                    ShowSheetLongPress(selectedImage: $backgroundImageName)
+                    ShowSheetLongPress(selectedImage: $backgroundImageName, abaTheme: $abaTheme)
                 })
             
             VStack{
@@ -44,12 +52,15 @@ struct ABA: View {
                     FavoritePath()
                     ExploreService()
                     GovernmentService()
-                    SheetChangeBackground(backgroundImageName: $backgroundImageName)
+                    SheetChangeBackground(backgroundImageName: $backgroundImageName, abaTheme: $abaTheme)
                 }.scrollIndicators(.hidden)
                 Spacer()
             }
             .padding(.horizontal, 35)
         }
+        .preferredColorScheme(
+            abaTheme == .system ? nil : (abaTheme == .dark ? .dark : .light)
+        )
     }
 }
 
