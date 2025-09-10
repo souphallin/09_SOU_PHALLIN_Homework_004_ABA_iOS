@@ -20,10 +20,12 @@ struct MoneyInfo: View {
                         if isShowPrice == true {
                             Text("$10000.00")
                                 .foregroundColor(.white)
+                                .fontWeight(.semibold)
                         }else{
                             Text("$10000.00")
                                 .blur(radius: 5)
                                 .foregroundColor(.white)
+                                .fontWeight(.semibold)
                         }
                         Image(systemName: isShowPrice ? "eye.slash" :"eye")
                             .frame(width: 17, height: 17)

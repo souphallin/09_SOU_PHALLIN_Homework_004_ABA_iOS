@@ -43,7 +43,6 @@ struct ABA: View {
                         .cornerRadius(15)
                     
                     DynamicButton()
-                        .padding(20)
                         .frame(maxWidth: .infinity, maxHeight: 250, alignment: .center)
                         .background(.ultraThinMaterial)
                         .cornerRadius(15)
