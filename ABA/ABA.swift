@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ABA: View {
     @State private var showChangeBackgroundSheet = false
+    @State private var backgroundImageName: String = "Bayon"
 
     var body: some View {
         ZStack{
-            Image("Bayon")
+            Image(backgroundImageName)
                 .resizable()
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
@@ -21,7 +22,7 @@ struct ABA: View {
                     showChangeBackgroundSheet.toggle()
                 })
                 .sheet(isPresented: $showChangeBackgroundSheet, content: {
-                    ShowSheetLongPress()
+                    ShowSheetLongPress(selectedImage: $backgroundImageName)
                 })
             
             VStack{
@@ -43,7 +44,7 @@ struct ABA: View {
                     FavoritePath()
                     ExploreService()
                     GovernmentService()
-                    SheetChangeBackground()
+                    SheetChangeBackground(backgroundImageName: $backgroundImageName)
                 }.scrollIndicators(.hidden)
                 Spacer()
             }

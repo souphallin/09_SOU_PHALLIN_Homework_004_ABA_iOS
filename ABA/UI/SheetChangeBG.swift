@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SheetChangeBackground: View {
     @State private var isEditHome : Bool = false
-//    @State private var selectedAppearanceImage: Bool = false
+    @Binding var backgroundImageName: String
     
     var body: some View {
         VStack{
@@ -25,7 +25,7 @@ struct SheetChangeBackground: View {
             .background(.white)
             .cornerRadius(40)
             .sheet(isPresented: $isEditHome, content: {
-                ShowSheetLongPress()
+                ShowSheetLongPress(selectedImage: $backgroundImageName)
             })
         }
     }
@@ -36,6 +36,7 @@ struct ShowSheetLongPress: View {
     @Environment(\.colorScheme) var colorScheme
     let appearances : [String] = ["Themes", "Dark Mode", "Homescreen", "System", "Accessibility"]
     let appearanceImages : [[String]] = [["Bayon", "Bayon"], ["BonTeaySrey", "BonTeaySrey"], ["Cute Pets", "Cute Pets"], ["Khmer Heritage", "Khmer Heritage"], ["Moon Night", "Moon Night"], ["Sunset", "Moon Night"], ["Train", "Train"]]
+    @Binding var selectedImage: String
     
     @State var selectedAppearanceImage: String? = nil
     
@@ -73,7 +74,7 @@ struct ShowSheetLongPress: View {
                 LazyHStack{
                     ForEach(appearanceImages, id: \.self){appearanceImage in
                         HStack(spacing: 20){
-                            CardAppearanceImage(appearanceImage: appearanceImage[0], appearanceTitle: appearanceImage[1], selectedAppearanceImage : $selectedAppearanceImage)
+                            CardAppearanceImage(appearanceImage: appearanceImage[0], appearanceTitle: appearanceImage[1], selectedImage : $selectedImage)
                         }
                     }
                 }
@@ -92,7 +93,7 @@ extension Color{
 struct CardAppearanceImage: View {
     var appearanceImage: String
     var appearanceTitle: String
-    @Binding var selectedAppearanceImage: String?
+    @Binding var selectedImage: String
     
     var body: some View {
         VStack{
@@ -103,14 +104,11 @@ struct CardAppearanceImage: View {
                 .clipped()
                 .overlay(content: {
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(selectedAppearanceImage == appearanceImage ? Color.blue : Color.white, lineWidth: selectedAppearanceImage == appearanceImage ? 8 : 5)
+                        .stroke(selectedImage == appearanceImage ? Color.blue : Color.white, lineWidth: selectedImage == appearanceImage ? 8 : 5)
                 })
                 .onTapGesture {
-                    if selectedAppearanceImage == appearanceImage {
-                        selectedAppearanceImage = nil
-                    }else{
-                        selectedAppearanceImage = appearanceImage
-                    }
+                    print("Selected image: \(appearanceImage)")
+                    selectedImage = appearanceImage
                 }
                 .cornerRadius(20)
 

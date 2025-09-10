@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ProfileInfo: View {
+    @State private var qrCodeIsPresented: Bool = false
     var body: some View {
         HStack{
             Image("AngkorWat")
@@ -29,17 +30,33 @@ struct ProfileInfo: View {
             Spacer()
             
             HStack{
-                Image(systemName: "bell")
-                    .resizable()
-                    .frame(width: 25, height: 25)
-                    .foregroundColor(.white)
-
-                Image("IconGoToQR")
-                    .resizable()
-                    .frame(width: 20, height: 20)
+                Button(action: {
+                    
+                }){
+                    Image("notificatioIcon")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                        .foregroundColor(.white)
+                }
+                
+                Button(action: {
+                    qrCodeIsPresented.toggle()
+                }){
+                    Image("IconGoToQR")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                }.fullScreenCover(isPresented: $qrCodeIsPresented){
+                    QRGenerator()
+                }
+                    
             }
             .font(.title)
             .frame(width: 100, height: 30, alignment: .trailing)
         }
     }
+}
+
+
+#Preview {
+    ProfileInfo()
 }
